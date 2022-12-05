@@ -1,0 +1,2 @@
+INSERT INTO categorias (cor, titulo) SELECT * FROM (SELECT '#cbd1ff', 'LIVRE') AS tmp WHERE NOT EXISTS (SELECT titulo FROM categorias WHERE titulo = 'LIVRE') LIMIT 1;
+UPDATE challenges.videos SET categoria_id = 1 WHERE categoria_id IS NULL;
