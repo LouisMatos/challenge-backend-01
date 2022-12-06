@@ -27,7 +27,6 @@ public class VideoService {
 	@Autowired
 	private CategoriaRepository categoriaRepository;
 
-
 	public List<VideoResponseDTO> listarTodosVideos(String titulo) {
 
 		List<VideoResponseDTO> videosResponses = new ArrayList<>();
@@ -53,8 +52,7 @@ public class VideoService {
 		}
 
 		for (Video video : videos) {
-			VideoResponseDTO videoResponseDTO = new VideoResponseDTO();
-			videosResponses.add(videoResponseDTO.convert(video));
+			videosResponses.add(new VideoResponseDTO().convert(video));
 		}
 
 		return videosResponses;

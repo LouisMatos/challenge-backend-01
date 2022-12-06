@@ -33,6 +33,11 @@ public class VideoController {
 	@Autowired
 	private VideoService videoService;
 
+	@PostMapping
+	public ResponseEntity<VideoResponseDTO> cadastrarVideo(@Valid @RequestBody VideoRequestDTO videoRequestDTO) {
+		return ResponseEntity.ok().body(videoService.salvarVideo(videoRequestDTO));
+	}
+
 	@GetMapping
 	public ResponseEntity<List<VideoResponseDTO>> listarCompromissos(@RequestParam(required = false, name = "search") String titulo) {
 		return ResponseEntity.ok().body( videoService.listarTodosVideos(titulo));
@@ -41,11 +46,6 @@ public class VideoController {
 	@GetMapping("/{id}")
 	public ResponseEntity<VideoResponseDTO> buscarVideoPorId(@PathVariable("id") Long id) {
 		return ResponseEntity.ok().body(videoService.buscarVideoPorId(id));
-	}
-
-	@PostMapping
-	public ResponseEntity<VideoResponseDTO> cadastrarVideo(@Valid @RequestBody VideoRequestDTO videoRequestDTO) {
-		return ResponseEntity.ok().body(videoService.salvarVideo(videoRequestDTO));
 	}
 
 	@DeleteMapping("/{id}")

@@ -17,7 +17,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.luis.challengebackend.dto.CategoriaDTO;
+import br.com.luis.challengebackend.dto.CategoriaRequestDTO;
+import br.com.luis.challengebackend.dto.CategoriaResponseDTO;
 import br.com.luis.challengebackend.dto.VideoResponseDTO;
 import br.com.luis.challengebackend.model.Categoria;
 import br.com.luis.challengebackend.service.CategoriaService;
@@ -33,8 +34,13 @@ public class CategoriaController {
 	@Autowired
 	private CategoriaService categoriaService;
 
+	@PostMapping
+	public ResponseEntity<CategoriaResponseDTO> cadastrarCategoria(@Valid @RequestBody CategoriaRequestDTO categoriaRequestDTO) {
+		return ResponseEntity.ok().body(categoriaService.salvarCategoria(categoriaRequestDTO));
+	}
+
 	@GetMapping
-	public ResponseEntity<List<Categoria>> listarTodasCategorias() {
+	public ResponseEntity<List<CategoriaResponseDTO>> listarTodasCategorias() {
 		return ResponseEntity.ok().body(categoriaService.listarTodasCategorias());
 	}
 
@@ -43,9 +49,9 @@ public class CategoriaController {
 		return ResponseEntity.ok().body(categoriaService.buscarCategoriaPorId(id));
 	}
 
-	@PostMapping
-	public ResponseEntity<Categoria> cadastrarCategoria(@Valid @RequestBody CategoriaDTO categoriaDTO) {
-		return ResponseEntity.ok().body(categoriaService.salvarCategoria(categoriaDTO));
+	@GetMapping("/{id}/videos")
+	public ResponseEntity<List<VideoResponseDTO>> buscarVideosPorCategoria(@PathVariable("id") Long id) {
+		return ResponseEntity.ok().body(categoriaService.buscarVideosPorCategoria(id));
 	}
 
 	@DeleteMapping("/{id}")
@@ -56,13 +62,8 @@ public class CategoriaController {
 
 	@PutMapping("/{id}")
 	public ResponseEntity<Categoria> alterarCategoria(@PathVariable("id") Long id,
-			@Valid @RequestBody CategoriaDTO categoriaDTO) {
-		return ResponseEntity.ok().body(categoriaService.alterarCategoria(id, categoriaDTO));
-	}
-
-	@GetMapping("/{id}/videos")
-	public ResponseEntity<List<VideoResponseDTO>> buscarVideosPorCategoria(@PathVariable("id") Long id){
-		return ResponseEntity.ok().body(categoriaService.buscarVideosPorCategoria(id));
+			@Valid @RequestBody CategoriaRequestDTO categoriaRequestDTO) {
+		return ResponseEntity.ok().body(categoriaService.alterarCategoria(id, categoriaRequestDTO));
 	}
 
 }

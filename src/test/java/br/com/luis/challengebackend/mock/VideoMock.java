@@ -18,7 +18,13 @@ public class VideoMock {
 
 	public static final VideoRequestDTO VIDEO_WITHOUT_CATEGORY = carregarVideoSemCategoria();
 
-	public static final String VIDEO_RESPONSE_BAD_REQUEST = "{\"violations\":[{\"campo\":\"titulo\",\"mensagem\":\"Titulo deve ter tamanho minimo de 2 caracteres\"},{\"campo\":\"url\",\"mensagem\":\"Url deve ter tamanho minimo de 2 caracteres\"},{\"campo\":\"url\",\"mensagem\":\"Campo url é obrigatório!\"},{\"campo\":\"titulo\",\"mensagem\":\"Campo titulo é obrigatório!\"}]}";
+	public static final String VIDEO_RESPONSE_BAD_REQUEST = "{\"violations\":[{\"campo\":\"titulo\",\"mensagem\":\"Campo titulo é obrigatório!\"},{\"campo\":\"titulo\",\"mensagem\":\"Titulo deve ter tamanho minimo de 2 caracteres\"},{\"campo\":\"url\",\"mensagem\":\"Url deve ter tamanho minimo de 2 caracteres\"},{\"campo\":\"url\",\"mensagem\":\"Campo url é obrigatório!\"}]}";
+
+	public static final String VIDEO_FIND_ALL_NOT_FOUND = "{\"timestamp\":1670272584333,\"status\":404,\"error\":\"NOT_FOUND\",\"message\":\"Não há videos cadastrados!\",\"path\":\"/videos\"}";
+
+	public static final String VIDEO_NOT_FOUND = "{\"timestamp\":1670267562653,\"status\":404,\"error\":\"NOT_FOUND\",\"message\":\"Nenhum video foi encontrado com o id informado: 1\",\"path\":\"/videos/1\"}";
+
+	public static final String VIDEO_UNPROCESSABLE_ENTITY_DELETE = "{\"timestamp\":1670271691983,\"status\":422,\"error\":\"UNPROCESSABLE_ENTITY\",\"message\":\"Não existe video com o id: 1\",\"path\":\"/videos/1\"}";
 
 	private static VideoResponseDTO carregaVideoResponseDTO() {
 

@@ -9,7 +9,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import br.com.luis.challengebackend.dto.CategoriaDTO;
+import br.com.luis.challengebackend.dto.CategoriaRequestDTO;
+import br.com.luis.challengebackend.dto.CategoriaResponseDTO;
 import br.com.luis.challengebackend.dto.VideoResponseDTO;
 import br.com.luis.challengebackend.exception.NotFoundException;
 import br.com.luis.challengebackend.exception.UnprocessableEntityException;
@@ -26,13 +27,21 @@ public class CategoriaService {
 	@Autowired
 	private ModelMapper mapper;
 
-	public List<Categoria> listarTodasCategorias() {
+	public List<CategoriaResponseDTO> listarTodasCategorias() {
 
 		if (categoriaRepository.findAll().isEmpty()) {
 			throw new NotFoundException("Não há categorias cadastrados!");
 		}
 
-		return categoriaRepository.findAll();
+		List<Categoria> categorias = categoriaRepository.findAll();
+
+		List<CategoriaResponseDTO> dtos = new ArrayList<>();
+
+		for (Categoria categoria : categorias) {
+			dtos.add(new CategoriaResponseDTO().convert(categoria));
+		}
+
+		return dtos;
 	}
 
 	public Categoria buscarCategoriaPorId(Long id) {
@@ -40,14 +49,17 @@ public class CategoriaService {
 				.orElseThrow(() -> new NotFoundException("Nenhuma categoria foi encontrada com o id informado: " + id));
 	}
 
-	public Categoria salvarCategoria(@Valid CategoriaDTO categoriaDTO) {
-		boolean exists = categoriaRepository.existsByTitulo(categoriaDTO.getTitulo());
+	public CategoriaResponseDTO salvarCategoria(@Valid CategoriaRequestDTO categoriaRequestDTO) {
+		boolean exists = categoriaRepository.existsByTitulo(categoriaRequestDTO.getTitulo());
 		if (exists) {
 			throw new UnprocessableEntityException("Já existe uma categoria cadastrada com o mesmo Titulo!");
 		}
 
-		Categoria categoria = mapper.map(categoriaDTO, Categoria.class);
-		return categoriaRepository.save(categoria);
+		Categoria categoria = new Categoria();
+		categoria.setCor(categoriaRequestDTO.getCor());
+		categoria.setTitulo(categoriaRequestDTO.getTitulo());
+
+		return new CategoriaResponseDTO().convert(categoriaRepository.save(categoria));
 	}
 
 	public void deletarCategoria(Long id) {
@@ -58,13 +70,13 @@ public class CategoriaService {
 		categoriaRepository.deleteById(id);
 	}
 
-	public Categoria alterarCategoria(Long id, @Valid CategoriaDTO categoriaDTO) {
+	public Categoria alterarCategoria(Long id, @Valid CategoriaRequestDTO categoriaRequestDTO) {
 		boolean exists = categoriaRepository.existsById(id);
 		if (!exists) {
 			throw new UnprocessableEntityException("Não existe categoria com o id: " + id);
 		}
 
-		Categoria categoria = mapper.map(categoriaDTO, Categoria.class);
+		Categoria categoria = mapper.map(categoriaRequestDTO, Categoria.class);
 		categoria.setId(id);
 
 		return categoriaRepository.save(categoria);
