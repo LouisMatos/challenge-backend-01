@@ -2,13 +2,23 @@ package br.com.luis.challengebackend.mock;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import br.com.luis.challengebackend.dto.VideoRequestDTO;
 import br.com.luis.challengebackend.dto.VideoResponseDTO;
+import br.com.luis.challengebackend.model.Video;
 
 public class VideoMock {
 
 	public static final VideoRequestDTO VIDEO = carregarVideo();
+
+	public static final Video VIDEO_SERVICE = carregaVideoService();
+
+	public static final Optional<Video> VIDEO_SERVICE_OP = carregaVideoServiceOP();
+
+	public static final List<Video> VIDEO_SERVICE_FIND_ALL_OP = carregaVideoServiceFindAllOP();
+
+	public static final List<Video> VIDEO_SERVICE_FIND_ALL_NOT_FOUND = carregaVideoServiceFindAllNotFound();
 
 	public static final VideoResponseDTO VIDEO_RESPONSE = carregaVideoResponseDTO();
 
@@ -57,6 +67,31 @@ public class VideoMock {
 
 		return dtos;
 
+	}
+
+	private static Video carregaVideoService() {
+		return Video.builder().id(1L).descricao("Teste").titulo("Teste").url("https://teste.com.br")
+				.categoriaId(CategoriaMock.CATEGORIA_SERVICE.get()).build();
+	}
+
+	private static Optional<Video> carregaVideoServiceOP() {
+		return Optional.of(Video.builder().id(1L).descricao("Teste").titulo("Teste").url("https://teste.com.br")
+				.categoriaId(CategoriaMock.CATEGORIA_SERVICE.get()).build());
+	}
+
+	private static List<Video> carregaVideoServiceFindAllOP() {
+
+		List<Video> videos = new ArrayList<>();
+
+		videos.add(Video.builder().id(1L).descricao("Teste").titulo("Teste").url("https://teste.com.br")
+				.categoriaId(CategoriaMock.CATEGORIA_SERVICE.get()).build());
+
+		return videos;
+	}
+
+	private static List<Video> carregaVideoServiceFindAllNotFound() {
+		List<Video> videos = new ArrayList<>();
+		return videos;
 	}
 
 }

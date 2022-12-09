@@ -27,27 +27,39 @@ public class VideoService {
 	@Autowired
 	private CategoriaRepository categoriaRepository;
 
+	public VideoResponseDTO salvarVideo(@Valid VideoRequestDTO videoRequestDTO) {
+
+		boolean exists = videoRepository.existsByUrl(videoRequestDTO.getUrl());
+
+		if (exists) {
+			throw new UnprocessableEntityException("Já existe um video cadastrado com a mesma url!");
+		}
+
+		return salvaEAtualizaVideo(videoRequestDTO, null);
+
+	}
+
 	public List<VideoResponseDTO> listarTodosVideos(String titulo) {
 
 		List<VideoResponseDTO> videosResponses = new ArrayList<>();
 
-		if (videoRepository.findAll().isEmpty()) {
-			throw new NotFoundException("Não há videos cadastrados!");
-		}
-
-		List<Video> videos;
+		List<Video> videos = null;
 
 		if (titulo == null) {
 
 			videos = videoRepository.findAll();
 
-		} else {
-
-			if (videoRepository.findByTituloContains(titulo) == null) {
-				throw new NotFoundException("Nenhum video foi encontrado com o titulo informado: " + titulo);
+			if (videos.isEmpty()) {
+				throw new NotFoundException("Não há videos cadastrados!");
 			}
 
+		} else {
+
 			videos = videoRepository.findByTituloContains(titulo);
+
+			if (videos.isEmpty()) {
+				throw new NotFoundException("Nenhum video foi encontrado com o titulo informado: " + titulo);
+			}
 
 		}
 
@@ -61,18 +73,6 @@ public class VideoService {
 	public VideoResponseDTO buscarVideoPorId(Long id) {
 		return new VideoResponseDTO().convert(videoRepository.findById(id)
 				.orElseThrow(() -> new NotFoundException("Nenhum video foi encontrado com o id informado: " + id)));
-	}
-
-	public VideoResponseDTO salvarVideo(@Valid VideoRequestDTO videoRequestDTO) {
-
-		boolean exists = videoRepository.existsByUrl(videoRequestDTO.getUrl());
-
-		if (exists) {
-			throw new UnprocessableEntityException("Já existe um video cadastrado com a mesma url!");
-		}
-
-		return salvaEAtualizaVideo(videoRequestDTO, null);
-
 	}
 
 	public void deletarVideo(Long id) {

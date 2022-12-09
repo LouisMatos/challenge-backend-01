@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.luis.challengebackend.dto.CategoriaRequestDTO;
 import br.com.luis.challengebackend.dto.CategoriaResponseDTO;
 import br.com.luis.challengebackend.dto.VideoResponseDTO;
-import br.com.luis.challengebackend.model.Categoria;
 import br.com.luis.challengebackend.service.CategoriaService;
 import io.swagger.annotations.Api;
 
@@ -45,7 +44,7 @@ public class CategoriaController {
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<Categoria> buscarCategoriaPorId(@PathVariable("id") Long id) {
+	public ResponseEntity<CategoriaResponseDTO> buscarCategoriaPorId(@PathVariable("id") Long id) {
 		return ResponseEntity.ok().body(categoriaService.buscarCategoriaPorId(id));
 	}
 
@@ -61,7 +60,7 @@ public class CategoriaController {
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<Categoria> alterarCategoria(@PathVariable("id") Long id,
+	public ResponseEntity<CategoriaResponseDTO> alterarCategoria(@PathVariable("id") Long id,
 			@Valid @RequestBody CategoriaRequestDTO categoriaRequestDTO) {
 		return ResponseEntity.ok().body(categoriaService.alterarCategoria(id, categoriaRequestDTO));
 	}

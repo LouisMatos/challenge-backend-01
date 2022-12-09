@@ -1,8 +1,5 @@
 package br.com.luis.challengebackend.dto;
 
-import org.springframework.boot.configurationprocessor.json.JSONException;
-import org.springframework.boot.configurationprocessor.json.JSONObject;
-
 import br.com.luis.challengebackend.model.Video;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -35,12 +32,4 @@ public class VideoResponseDTO {
 		this.setUrl(video.getUrl());
 		return this;
 	}
-
-	public String jsonConvert() throws JSONException {
-		JSONObject jsonObject = new JSONObject();
-
-		return jsonObject.put("Videos", this).toString();
-
-	}
-
 }

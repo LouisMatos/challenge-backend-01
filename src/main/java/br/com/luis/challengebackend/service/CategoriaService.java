@@ -2,10 +2,10 @@ package br.com.luis.challengebackend.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,16 +24,13 @@ public class CategoriaService {
 	@Autowired
 	private CategoriaRepository categoriaRepository;
 
-	@Autowired
-	private ModelMapper mapper;
-
 	public List<CategoriaResponseDTO> listarTodasCategorias() {
 
-		if (categoriaRepository.findAll().isEmpty()) {
+		List<Categoria> categorias = categoriaRepository.findAll();
+
+		if (categorias.isEmpty()) {
 			throw new NotFoundException("Não há categorias cadastrados!");
 		}
-
-		List<Categoria> categorias = categoriaRepository.findAll();
 
 		List<CategoriaResponseDTO> dtos = new ArrayList<>();
 
@@ -44,13 +41,15 @@ public class CategoriaService {
 		return dtos;
 	}
 
-	public Categoria buscarCategoriaPorId(Long id) {
-		return categoriaRepository.findById(id)
-				.orElseThrow(() -> new NotFoundException("Nenhuma categoria foi encontrada com o id informado: " + id));
+	public CategoriaResponseDTO buscarCategoriaPorId(Long id) {
+		return new CategoriaResponseDTO().convert(categoriaRepository.findById(id).orElseThrow(
+				() -> new NotFoundException("Nenhuma categoria foi encontrada com o id informado: " + id)));
 	}
 
 	public CategoriaResponseDTO salvarCategoria(@Valid CategoriaRequestDTO categoriaRequestDTO) {
+
 		boolean exists = categoriaRepository.existsByTitulo(categoriaRequestDTO.getTitulo());
+
 		if (exists) {
 			throw new UnprocessableEntityException("Já existe uma categoria cadastrada com o mesmo Titulo!");
 		}
@@ -70,29 +69,34 @@ public class CategoriaService {
 		categoriaRepository.deleteById(id);
 	}
 
-	public Categoria alterarCategoria(Long id, @Valid CategoriaRequestDTO categoriaRequestDTO) {
+	public CategoriaResponseDTO alterarCategoria(Long id, @Valid CategoriaRequestDTO categoriaRequestDTO) {
 		boolean exists = categoriaRepository.existsById(id);
 		if (!exists) {
 			throw new UnprocessableEntityException("Não existe categoria com o id: " + id);
 		}
 
-		Categoria categoria = mapper.map(categoriaRequestDTO, Categoria.class);
+		Categoria categoria = new Categoria();
+		categoria.setCor(categoriaRequestDTO.getCor());
+		categoria.setTitulo(categoriaRequestDTO.getTitulo());
 		categoria.setId(id);
 
-		return categoriaRepository.save(categoria);
+		return new CategoriaResponseDTO().convert(categoriaRepository.save(categoria));
 	}
 
 	public List<VideoResponseDTO> buscarVideosPorCategoria(Long id) {
-		boolean exists = categoriaRepository.existsById(id);
-		if (!exists) {
+
+		Optional<Categoria> categoria = categoriaRepository.findById(id);
+
+		if (categoria.isEmpty()) {
 			throw new UnprocessableEntityException("Não existe categoria com o id: " + id);
 		}
 
-		List<Video> videos = categoriaRepository.findById(id).get().getVideos();
-
-		if (videos.isEmpty()) {
+		if (categoria.get().getVideos().isEmpty()) {
 			throw new NotFoundException("Não há videos cadastrados para essa categoria!");
 		}
+
+		List<Video> videos = categoria.get().getVideos();
+
 		List<VideoResponseDTO> videosResponses = new ArrayList<>();
 
 		for (Video video : videos) {
