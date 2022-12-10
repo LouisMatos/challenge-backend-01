@@ -11,8 +11,6 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -41,7 +39,6 @@ public class Categoria implements Serializable {
 
 	private String cor;
 
-	@JsonIgnore
 	@OneToMany(mappedBy = "categoriaId")
 	private List<Video> videos = new ArrayList<>();
 
