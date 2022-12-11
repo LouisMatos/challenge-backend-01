@@ -7,6 +7,8 @@ import java.util.Optional;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import br.com.luis.challengebackend.dto.VideoRequestDTO;
@@ -39,15 +41,19 @@ public class VideoService {
 
 	}
 
-	public List<VideoResponseDTO> listarTodosVideos(String titulo) {
+	public List<VideoResponseDTO> listarTodosVideos(String titulo, Pageable pageable) {
 
 		List<VideoResponseDTO> videosResponses = new ArrayList<>();
 
-		List<Video> videos = null;
+		Page<Video> videos = null;
 
 		if (titulo == null) {
 
-			videos = videoRepository.findAll();
+			videos = videoRepository.findAll(pageable);
+
+			if (videos.getContent().isEmpty()) {
+				throw new NotFoundException("Não há videos na pagina: " + videos.getNumber());
+			}
 
 			if (videos.isEmpty()) {
 				throw new NotFoundException("Não há videos cadastrados!");
@@ -55,7 +61,11 @@ public class VideoService {
 
 		} else {
 
-			videos = videoRepository.findByTituloContains(titulo);
+			videos = videoRepository.findByTituloContains(titulo, pageable);
+
+			if (videos.getContent().isEmpty()) {
+				throw new NotFoundException("Não há videos na pagina: " + videos.getNumber());
+			}
 
 			if (videos.isEmpty()) {
 				throw new NotFoundException("Nenhum video foi encontrado com o titulo informado: " + titulo);
@@ -109,6 +119,20 @@ public class VideoService {
 		video.setId(id);
 
 		return new VideoResponseDTO().convert(videoRepository.save(video));
+	}
+
+	public List<VideoResponseDTO> free() {
+		List<VideoResponseDTO> videosResponses = new ArrayList<>();
+
+		List<Video> videos = null;
+
+		videos = videoRepository.findByFree();
+
+		for (Video video : videos) {
+			videosResponses.add(new VideoResponseDTO().convert(video));
+		}
+
+		return videosResponses;
 	}
 
 }

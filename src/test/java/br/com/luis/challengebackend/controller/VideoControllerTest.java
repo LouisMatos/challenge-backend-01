@@ -137,13 +137,12 @@ class VideoControllerTest {
 	@Test
 	void returStatus200WhenFindAllVideos() throws Exception {
 
-		when(videoService.listarTodosVideos(any())).thenReturn(VideoMock.FIND_ALL);
+		when(videoService.listarTodosVideos(any(), any())).thenReturn(VideoMock.FIND_ALL);
 
 		MvcResult result = mockMvc.perform( //
-				get("/videos") //
+				get("/videos?page=0") //
 				.contentType(APPLICATION_JSON)) //
-				.andExpect(status().isOk())
-				.andReturn();
+				.andExpect(status().isOk()).andReturn();
 
 		assertEquals(toString(VideoMock.FIND_ALL), result.getResponse().getContentAsString());
 
@@ -152,10 +151,11 @@ class VideoControllerTest {
 	@Test
 	void returnStatus404WhenFindAllVideosNotFound() throws Exception {
 
-		when(videoService.listarTodosVideos(any())).thenThrow(new NotFoundException("Não há videos cadastrados!"));
+		when(videoService.listarTodosVideos(any(), any()))
+		.thenThrow(new NotFoundException("Não há videos cadastrados!"));
 
 		MvcResult result = mockMvc.perform( //
-				get("/videos") //
+				get("/videos?page=0") //
 				.contentType(APPLICATION_JSON)) //
 				.andExpect(status().isNotFound()).andReturn();
 

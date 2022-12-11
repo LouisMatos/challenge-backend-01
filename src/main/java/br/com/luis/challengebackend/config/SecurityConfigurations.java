@@ -17,6 +17,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import br.com.luis.challengebackend.enums.Role;
 import br.com.luis.challengebackend.repository.UserRepository;
+import br.com.luis.challengebackend.service.AuthenticationService;
+import br.com.luis.challengebackend.service.TokenService;
 
 @SuppressWarnings("deprecation")
 @Configuration

@@ -5,6 +5,9 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -34,13 +37,15 @@ public class CategoriaController {
 	private CategoriaService categoriaService;
 
 	@PostMapping
-	public ResponseEntity<CategoriaResponseDTO> cadastrarCategoria(@Valid @RequestBody CategoriaRequestDTO categoriaRequestDTO) {
+	public ResponseEntity<CategoriaResponseDTO> cadastrarCategoria(
+			@Valid @RequestBody CategoriaRequestDTO categoriaRequestDTO) {
 		return ResponseEntity.ok().body(categoriaService.salvarCategoria(categoriaRequestDTO));
 	}
 
 	@GetMapping
-	public ResponseEntity<List<CategoriaResponseDTO>> listarTodasCategorias() {
-		return ResponseEntity.ok().body(categoriaService.listarTodasCategorias());
+	public ResponseEntity<List<CategoriaResponseDTO>> listarTodasCategorias(
+			@PageableDefault(page = 0, size = 5, sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
+		return ResponseEntity.ok().body(categoriaService.listarTodasCategorias(pageable));
 	}
 
 	@GetMapping("/{id}")

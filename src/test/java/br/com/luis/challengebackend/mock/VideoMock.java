@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+
 import br.com.luis.challengebackend.dto.VideoRequestDTO;
 import br.com.luis.challengebackend.dto.VideoResponseDTO;
 import br.com.luis.challengebackend.model.Video;
@@ -16,9 +19,9 @@ public class VideoMock {
 
 	public static final Optional<Video> VIDEO_SERVICE_OP = carregaVideoServiceOP();
 
-	public static final List<Video> VIDEO_SERVICE_FIND_ALL_OP = carregaVideoServiceFindAllOP();
+	public static final Page<Video> VIDEO_SERVICE_FIND_ALL_OP = carregaVideoServiceFindAllOP();
 
-	public static final List<Video> VIDEO_SERVICE_FIND_ALL_NOT_FOUND = carregaVideoServiceFindAllNotFound();
+	public static final Page<Video> VIDEO_SERVICE_FIND_ALL_NOT_FOUND = carregaVideoServiceFindAllNotFound();
 
 	public static final VideoResponseDTO VIDEO_RESPONSE = carregaVideoResponseDTO();
 
@@ -79,19 +82,22 @@ public class VideoMock {
 				.categoriaId(CategoriaMock.CATEGORIA_SERVICE.get()).build());
 	}
 
-	private static List<Video> carregaVideoServiceFindAllOP() {
+	private static Page<Video> carregaVideoServiceFindAllOP() {
 
 		List<Video> videos = new ArrayList<>();
 
 		videos.add(Video.builder().id(1L).descricao("Teste").titulo("Teste").url("https://teste.com.br")
 				.categoriaId(CategoriaMock.CATEGORIA_SERVICE.get()).build());
 
-		return videos;
+		Page<Video> page = new PageImpl<>(videos);
+
+		return page;
 	}
 
-	private static List<Video> carregaVideoServiceFindAllNotFound() {
+	private static Page<Video> carregaVideoServiceFindAllNotFound() {
 		List<Video> videos = new ArrayList<>();
-		return videos;
+		Page<Video> page = new PageImpl<>(videos);
+		return page;
 	}
 
 }

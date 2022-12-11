@@ -16,6 +16,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 
@@ -74,25 +76,29 @@ class CategoriaServiceTest {
 	@Test
 	void returnFindAllCategorias() {
 
-		when(categoriaRepository.findAll()).thenReturn(CategoriaMock.CATEGORIA_SERVICE_FIND_ALL);
+		Pageable pageable = PageRequest.of(0, 5);
 
-		List<CategoriaResponseDTO> response = categoriaService.listarTodasCategorias();
+		when(categoriaRepository.findAll(pageable)).thenReturn(CategoriaMock.CATEGORIA_SERVICE_FIND_ALL);
+
+		List<CategoriaResponseDTO> response = categoriaService.listarTodasCategorias(pageable);
 
 		assertNotNull(response);
 
-		verify(categoriaRepository).findAll();
+		verify(categoriaRepository).findAll(pageable);
 
 	}
 
 	@Test
 	void returnFindAllNotFoundCategoria() {
 
-		when(categoriaRepository.findAll()).thenReturn(CategoriaMock.CATEGORIA_SERVICE_FIND_ALL_NOT_FOUND);
+		Pageable pageable = PageRequest.of(0, 5);
+
+		when(categoriaRepository.findAll(pageable)).thenReturn(CategoriaMock.CATEGORIA_SERVICE_FIND_ALL_NOT_FOUND);
 
 		NotFoundException thrown = assertThrows(NotFoundException.class,
-				() -> categoriaService.listarTodasCategorias());
+				() -> categoriaService.listarTodasCategorias(pageable));
 
-		assertEquals(thrown.getMessage(), ("Não há categorias cadastrados!"));
+		assertEquals(thrown.getMessage(), ("Não há categorias na pagina: " + 0));
 
 	}
 

@@ -7,6 +7,8 @@ import java.util.Optional;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import br.com.luis.challengebackend.dto.CategoriaRequestDTO;
@@ -24,9 +26,13 @@ public class CategoriaService {
 	@Autowired
 	private CategoriaRepository categoriaRepository;
 
-	public List<CategoriaResponseDTO> listarTodasCategorias() {
+	public List<CategoriaResponseDTO> listarTodasCategorias(Pageable pageable) {
 
-		List<Categoria> categorias = categoriaRepository.findAll();
+		Page<Categoria> categorias = categoriaRepository.findAll(pageable);
+
+		if(categorias.getContent().isEmpty()) {
+			throw new NotFoundException("Não há categorias na pagina: " + categorias.getNumber());
+		}
 
 		if (categorias.isEmpty()) {
 			throw new NotFoundException("Não há categorias cadastrados!");

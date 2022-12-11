@@ -5,6 +5,9 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -38,9 +41,16 @@ public class VideoController {
 		return ResponseEntity.ok().body(videoService.salvarVideo(videoRequestDTO));
 	}
 
+	@GetMapping("/free")
+	public ResponseEntity<List<VideoResponseDTO>> listarVideosFree() {
+		return ResponseEntity.ok().body(videoService.free());
+	}
+
 	@GetMapping
-	public ResponseEntity<List<VideoResponseDTO>> listarCompromissos(@RequestParam(required = false, name = "search") String titulo) {
-		return ResponseEntity.ok().body( videoService.listarTodosVideos(titulo));
+	public ResponseEntity<List<VideoResponseDTO>> listarVideos(
+			@RequestParam(required = false, name = "search") String titulo,
+			@PageableDefault(page = 0, size = 5, sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
+		return ResponseEntity.ok().body(videoService.listarTodosVideos(titulo, pageable));
 	}
 
 	@GetMapping("/{id}")
@@ -55,7 +65,8 @@ public class VideoController {
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<VideoResponseDTO> atualizarVideo(@PathVariable("id") Long id, @Valid @RequestBody VideoRequestDTO videoRequestDTO) {
+	public ResponseEntity<VideoResponseDTO> atualizarVideo(@PathVariable("id") Long id,
+			@Valid @RequestBody VideoRequestDTO videoRequestDTO) {
 		return ResponseEntity.ok().body(videoService.alterarVideo(id, videoRequestDTO));
 	}
 

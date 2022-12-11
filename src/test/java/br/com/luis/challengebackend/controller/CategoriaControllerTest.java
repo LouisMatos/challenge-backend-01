@@ -147,10 +147,10 @@ class CategoriaControllerTest {
 	@Test
 	void return200FindAllCategorias() throws Exception {
 
-		when(categoriaService.listarTodasCategorias()).thenReturn(CategoriaMock.FIND_ALL);
+		when(categoriaService.listarTodasCategorias(any())).thenReturn(CategoriaMock.FIND_ALL);
 
 		MvcResult result = mockMvc.perform( //
-				get("/categorias") //
+				get("/categorias?page=0") //
 				.contentType(APPLICATION_JSON)) //
 				.andExpect(status().isOk()).andReturn();
 
@@ -161,11 +161,11 @@ class CategoriaControllerTest {
 	@Test
 	void return404WhenFindAllCategoriasNotFound() throws Exception {
 
-		when(categoriaService.listarTodasCategorias())
+		when(categoriaService.listarTodasCategorias(any()))
 		.thenThrow(new NotFoundException("Não há categorias cadastrados!"));
 
 		MvcResult result = mockMvc.perform( //
-				get("/categorias") //
+				get("/categorias?page=0") //
 				.contentType(APPLICATION_JSON)) //
 				.andExpect(status().isNotFound()).andReturn();
 

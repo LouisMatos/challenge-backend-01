@@ -1,4 +1,4 @@
-package br.com.luis.challengebackend.config;
+package br.com.luis.challengebackend.service;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
