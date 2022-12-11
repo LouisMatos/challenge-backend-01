@@ -1,5 +1,7 @@
 package br.com.luis.challengebackend.controller;
 
+import java.util.concurrent.CompletableFuture;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,9 +29,9 @@ public class AuthenticationController {
 	private AuthenticationManager authManager;
 
 	@PostMapping
-	public ResponseEntity<TokenDto> authenticate(@RequestBody @Valid Login form) {
-		TokenDto tokenDto = this.authService.authenticate(form, this.authManager);
-		return ResponseEntity.ok(tokenDto);
+	public CompletableFuture<Object> authenticate(@RequestBody @Valid Login form) {
+		CompletableFuture<TokenDto> tokenDto = authService.authenticate(form, this.authManager);
+		return tokenDto.thenApply(t ->  ResponseEntity.ok().body(t));
 
 	}
 

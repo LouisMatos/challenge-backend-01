@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Pageable;
+
 import br.com.luis.challengebackend.dto.CategoriaRequestDTO;
 import br.com.luis.challengebackend.dto.CategoriaResponseDTO;
 import br.com.luis.challengebackend.dto.VideoResponseDTO;
@@ -44,8 +46,16 @@ public class CategoriaMock {
 
 	public static final Optional<Categoria> VIDEO_CATEGORIA_SERVICE = carregaVideoPorCategoria();
 
+	public static final Pageable PAGE = carregarPage();
+
 	private static CategoriaRequestDTO carregaCategoria() {
 		return CategoriaRequestDTO.builder().cor("#cbd1ff").titulo("LIVRE").build();
+	}
+
+	private static Pageable carregarPage() {
+
+		return Pageable.unpaged();
+
 	}
 
 	private static List<CategoriaResponseDTO> carregarListarCategorias() {
