@@ -147,7 +147,7 @@ class CategoriaControllerTest {
 	@Test
 	void return200FindAllCategorias() throws Exception {
 
-		when(categoriaService.listarTodasCategorias(CategoriaMock.PAGE)).thenReturn(CategoriaMock.FIND_ALL);
+		when(categoriaService.listarTodasCategorias(any())).thenReturn(CategoriaMock.FIND_ALL);
 
 		MvcResult result = mockMvc.perform( //
 				get("/categorias?page=0") //
@@ -161,7 +161,7 @@ class CategoriaControllerTest {
 	@Test
 	void return404WhenFindAllCategoriasNotFound() throws Exception {
 
-		when(categoriaService.listarTodasCategorias(CategoriaMock.PAGE))
+		when(categoriaService.listarTodasCategorias(any()))
 		.thenThrow(new NotFoundException("Não há categorias cadastrados!"));
 
 		MvcResult result = mockMvc.perform( //

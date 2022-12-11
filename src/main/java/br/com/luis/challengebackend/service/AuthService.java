@@ -12,7 +12,6 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import br.com.luis.challengebackend.config.TokenService;
 import br.com.luis.challengebackend.dto.TokenDto;
 import br.com.luis.challengebackend.model.Login;
 import lombok.extern.slf4j.Slf4j;

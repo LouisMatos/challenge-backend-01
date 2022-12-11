@@ -6,24 +6,15 @@ services:
     container_name: db_challenge_backend
     ports:
       - 3306:3306
-    command: ["mysqld",
-        "--server_id=1",
-        "--binlog_checksum=NONE",
-        "--gtid_mode=ON",
-        "--enforce_gtid_consistency=ON",
-        "--log_bin",
-        "--log_slave_updates=ON",
-        "--master_info_repository=TABLE",
-        "--relay_log_info_repository=TABLE",
-        "--transaction_write_set_extraction=XXHASH64",
-        "--user=mysql",
-        "--skip-host-cache",
-        "--skip-name-resolve"]
+    command:
+      - "mysqld"
+      - "--innodb_buffer_pool_size=512M"
+      - "--ft-min_word-len=1"
+      - "--ft-stopword-file=''"
     networks:
       - net_back
     volumes:
       - mysql:/var/lib/mysql
-      - ./.mysql-data/db:/var/lib/mysql
     restart: always
     environment:
       - MYSQL_DATABASE=challenges
@@ -33,7 +24,7 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '3.00'
+          cpus: '2'
           memory: 2048M
           
 ##  microservico:
@@ -64,5 +55,5 @@ networks:
     driver: bridge
   
 volumes:
-  mysql: null
+  mysql: 
   

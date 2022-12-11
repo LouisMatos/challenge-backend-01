@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 
 import br.com.luis.challengebackend.dto.CategoriaRequestDTO;
 import br.com.luis.challengebackend.dto.CategoriaResponseDTO;
@@ -18,9 +19,9 @@ public class CategoriaMock {
 
 	public static final Optional<Categoria> CATEGORIA_SERVICE = carregaCategoriaService();
 
-	public static final List<Categoria> CATEGORIA_SERVICE_FIND_ALL = carregaCategoriaServiceFindAll();
+	public static final Page<Categoria> CATEGORIA_SERVICE_FIND_ALL = carregaCategoriaServiceFindAll();
 
-	public static final List<Categoria> CATEGORIA_SERVICE_FIND_ALL_NOT_FOUND = carregaCategoriaServiceFindAllNotFound();
+	public static final Page<Categoria> CATEGORIA_SERVICE_FIND_ALL_NOT_FOUND = carregaCategoriaServiceFindAllNotFound();
 
 	public static final CategoriaResponseDTO CATEGORIA_RESPONSE = carregaCategoriaResponse();
 
@@ -46,16 +47,8 @@ public class CategoriaMock {
 
 	public static final Optional<Categoria> VIDEO_CATEGORIA_SERVICE = carregaVideoPorCategoria();
 
-	public static final Pageable PAGE = carregarPage();
-
 	private static CategoriaRequestDTO carregaCategoria() {
 		return CategoriaRequestDTO.builder().cor("#cbd1ff").titulo("LIVRE").build();
-	}
-
-	private static Pageable carregarPage() {
-
-		return Pageable.unpaged();
-
 	}
 
 	private static List<CategoriaResponseDTO> carregarListarCategorias() {
@@ -93,20 +86,24 @@ public class CategoriaMock {
 		return Optional.of(categoria);
 	}
 
-	private static List<Categoria> carregaCategoriaServiceFindAll() {
+	private static Page<Categoria> carregaCategoriaServiceFindAll() {
 
 		List<Categoria> categorias = new ArrayList<>();
 
 		categorias.add(Categoria.builder().cor("#ac1234").titulo("LIVRE").id(1L).build());
 
-		return categorias;
+		Page<Categoria> page = new PageImpl<>(categorias);
+
+		return page;
 	}
 
-	private static List<Categoria> carregaCategoriaServiceFindAllNotFound() {
+	private static Page<Categoria> carregaCategoriaServiceFindAllNotFound() {
 
 		List<Categoria> categorias = new ArrayList<>();
 
-		return categorias;
+		Page<Categoria> page = new PageImpl<>(categorias);
+
+		return page;
 
 	}
 

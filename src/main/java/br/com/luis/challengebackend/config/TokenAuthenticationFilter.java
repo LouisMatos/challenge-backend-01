@@ -16,6 +16,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import br.com.luis.challengebackend.model.User;
 import br.com.luis.challengebackend.repository.UserRepository;
+import br.com.luis.challengebackend.service.TokenService;
 
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
 

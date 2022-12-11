@@ -16,6 +16,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 
@@ -176,48 +178,60 @@ class VideoServiceTest {
 	@Test
 	void returnListAllVideosWithoutSearch() {
 
-		when(videoRepository.findAll()).thenReturn(VideoMock.VIDEO_SERVICE_FIND_ALL_OP);
+		Pageable pageable = PageRequest.of(0, 5);
 
-		List<VideoResponseDTO> videos = videoService.listarTodosVideos(null);
+		when(videoRepository.findAll(pageable)).thenReturn(VideoMock.VIDEO_SERVICE_FIND_ALL_OP);
+
+		List<VideoResponseDTO> videos = videoService.listarTodosVideos(null, pageable);
 
 		assertNotNull(videos);
 
-		verify(videoRepository).findAll();
+		verify(videoRepository).findAll(pageable);
 	}
 
 	@Test
 	void returnNotFoundListVideosWithoutSearch() {
 
-		when(videoRepository.findAll()).thenReturn(VideoMock.VIDEO_SERVICE_FIND_ALL_NOT_FOUND);
+		Pageable pageable = PageRequest.of(0, 5);
 
-		NotFoundException thrown = assertThrows(NotFoundException.class, () -> videoService.listarTodosVideos(null));
+		when(videoRepository.findAll(pageable)).thenReturn(VideoMock.VIDEO_SERVICE_FIND_ALL_NOT_FOUND);
 
-		assertEquals(thrown.getMessage(), ("Não há videos cadastrados!"));
+		NotFoundException thrown = assertThrows(NotFoundException.class,
+				() -> videoService.listarTodosVideos(null, pageable));
+
+		assertEquals(thrown.getMessage(), ("Não há videos na pagina: 0"));
 
 	}
 
 	@Test
 	void returnListAllVideosWithSearch() {
 
-		when(videoRepository.findByTituloContains(anyString())).thenReturn(VideoMock.VIDEO_SERVICE_FIND_ALL_OP);
+		Pageable pageable = PageRequest.of(0, 5);
 
-		List<VideoResponseDTO> videos = videoService.listarTodosVideos(anyString());
+		when(videoRepository.findByTituloContains("TEst", pageable))
+		.thenReturn(VideoMock.VIDEO_SERVICE_FIND_ALL_OP);
+
+		List<VideoResponseDTO> videos = videoService.listarTodosVideos("TEst", pageable);
 
 		assertNotNull(videos);
 
-		verify(videoRepository).findByTituloContains(anyString());
+		verify(videoRepository).findByTituloContains("TEst", pageable);
 	}
 
 	@Test
 	void returnNotFoundListVideosWithSearch() {
 
+		Pageable pageable = PageRequest.of(0, 5);
+
 		String titulo = "Teste";
 
-		when(videoRepository.findByTituloContains(titulo)).thenReturn(VideoMock.VIDEO_SERVICE_FIND_ALL_NOT_FOUND);
+		when(videoRepository.findByTituloContains(titulo, pageable))
+		.thenReturn(VideoMock.VIDEO_SERVICE_FIND_ALL_NOT_FOUND);
 
-		NotFoundException thrown = assertThrows(NotFoundException.class, () -> videoService.listarTodosVideos(titulo));
+		NotFoundException thrown = assertThrows(NotFoundException.class,
+				() -> videoService.listarTodosVideos(titulo, pageable));
 
-		assertEquals(thrown.getMessage(), ("Nenhum video foi encontrado com o titulo informado: " + titulo));
+		assertEquals(thrown.getMessage(), ("Não há videos na pagina: 0"));
 	}
 
 }
