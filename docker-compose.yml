@@ -13,6 +13,7 @@ services:
       - "--ft-stopword-file=''"
     networks:
       - net_back
+    network_mode: bridge
     volumes:
       - mysql:/var/lib/mysql
     restart: always
@@ -24,31 +25,54 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '2'
-          memory: 2048M
-          
-##  microservico:
-##    build:
-##      context: ./
-##      dockerfile: Dockerfile
-#      args:
-#        - JAR_FILE=challenge-backend-api.jar
-#    image: testeluismatos/challenge-backend-api:0.0.1
-#    container_name: microservico
-#    environment:
-#      - SPRING_DATASOURCE_URL=jdbc:mysql://db_challenge_backend:3306/challenges?autoReconnect=true&useSSL=false
-#      - SPRING_PROFILES_ACTIVE=prod
+          cpus: '1'
+          memory: 1024M
+
+#  postgres:
+#    image: postgres:latest
+#    container_name: db_challenge_postgres
 #    ports:
-#      - 8080:8080
+#      - 5432:5432
+#    expose:
+#      - 5432
 #    networks:
 #      - net_back
-#    depends_on:
-#      - db_challenge_backend
+#    network_mode: bridge
+#    volumes:
+#      - postgres-data:/var/lib/postgresql/data
+#    restart: always
+#    environment:
+#      - POSTGRES_PASSWORD=admin
+#      - POSTGRES_USER=postgres
+#      - POSTGRES_DB=challenges
 #    deploy:
 #      resources:
 #        limits:
-#          cpus: '0.30'
-#          memory: 512M
+#          cpus: '1'
+#          memory: 1024M
+          
+  microservico:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+      args:
+        - JAR_FILE=challenge-backend-api.jar
+    image: testeluismatos/challenge-backend-api:0.0.1
+    container_name: microservico
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db_challenge_backend:3306/challenges
+      - SPRING_PROFILES_ACTIVE=prod
+    ports:
+      - 8080:8080
+    networks:
+      - net_back
+    depends_on:
+      - db_challenge_backend
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 1024M
           
 networks:
   net_back:
@@ -56,4 +80,5 @@ networks:
   
 volumes:
   mysql: 
+  postgres-data:
   

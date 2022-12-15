@@ -274,10 +274,10 @@ class CategoriaControllerTest {
 
 		Long id = 1L;
 
-		when(categoriaService.buscarVideosPorCategoria(anyLong())).thenReturn(CategoriaMock.FIND_ALL_CATEGORIA_VIDEO);
+		when(categoriaService.buscarVideosPorCategoria(anyLong(), any())).thenReturn(CategoriaMock.FIND_ALL_CATEGORIA_VIDEO);
 
 		MvcResult result = mockMvc.perform( //
-				get("/categorias/" + id + "/videos") //
+				get("/categorias/" + id + "/videos?page=0") //
 				.contentType(APPLICATION_JSON)) //
 				.andExpect(status().isOk()) //
 				.andReturn();
@@ -292,10 +292,10 @@ class CategoriaControllerTest {
 		Long id = 1L;
 
 		doThrow(new UnprocessableEntityException("Não existe categoria com o id: " + id)).when(categoriaService)
-		.buscarVideosPorCategoria(anyLong());
+		.buscarVideosPorCategoria(anyLong(), any());
 
 		MvcResult result = mockMvc.perform( //
-				get("/categorias/" + id + "/videos") //
+				get("/categorias/" + id + "/videos?page=0") //
 				.contentType(APPLICATION_JSON)) //
 				.andExpect(status().isUnprocessableEntity()).andReturn();
 
@@ -314,10 +314,10 @@ class CategoriaControllerTest {
 		Long id = 1L;
 
 		doThrow(new NotFoundException("Não há videos cadastrados para essa categoria!")).when(categoriaService)
-		.buscarVideosPorCategoria(anyLong());
+		.buscarVideosPorCategoria(anyLong(), any());
 
 		MvcResult result = mockMvc.perform( //
-				get("/categorias/" + id + "/videos") //
+				get("/categorias/" + id + "/videos?page=0") //
 				.contentType(APPLICATION_JSON)) //
 				.andExpect(status().isNotFound()).andReturn();
 

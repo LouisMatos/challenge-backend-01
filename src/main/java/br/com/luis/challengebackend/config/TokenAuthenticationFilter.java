@@ -32,9 +32,8 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 	}
 
 	@Override
-	protected void doFilterInternal(
-			HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-					throws ServletException, IOException {
+	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+			throws ServletException, IOException {
 
 		String token = retrieveToken(request);
 		boolean valid = tokenService.isValidToken(token);
@@ -52,8 +51,8 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 			throw new UsernameNotFoundException("Autenticação inválida");
 		}
 		User user = optional.get();
-		UsernamePasswordAuthenticationToken authentication =
-				new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+		UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(user, null,
+				user.getAuthorities());
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 	}
 

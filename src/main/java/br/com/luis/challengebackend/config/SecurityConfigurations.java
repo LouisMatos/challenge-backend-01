@@ -53,6 +53,7 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests()
 		.antMatchers(HttpMethod.POST, "/auth").permitAll()
 		.antMatchers(HttpMethod.GET, "/videos/free").permitAll()
+		.antMatchers("/actuator/**").permitAll()
 		.antMatchers(HttpMethod.DELETE, "/videos/*").hasRole(Role.ADMIN.value())
 		.antMatchers(HttpMethod.DELETE, "/categorias/*").hasRole(Role.ADMIN.value())
 		.anyRequest().authenticated()

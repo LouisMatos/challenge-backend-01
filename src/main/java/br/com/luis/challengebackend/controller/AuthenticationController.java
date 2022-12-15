@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,16 +24,16 @@ import br.com.luis.challengebackend.service.AuthService;
 public class AuthenticationController {
 
 	@Autowired
-	private AuthService authService;
+	private  AuthService authService;
 
 	@Autowired
 	private AuthenticationManager authManager;
 
 	@PostMapping
-	public CompletableFuture<Object> authenticate(@RequestBody @Valid Login form) {
+	@Async(value = "taskExecutor")
+	public CompletableFuture<ResponseEntity<TokenDto>> authenticate(@RequestBody @Valid Login form) {
 		CompletableFuture<TokenDto> tokenDto = authService.authenticate(form, this.authManager);
-		return tokenDto.thenApply(t ->  ResponseEntity.ok().body(t));
-
+		return tokenDto.thenApply(t -> ResponseEntity.ok().body(t));
 	}
 
 }

@@ -24,9 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.luis.challengebackend.dto.VideoRequestDTO;
 import br.com.luis.challengebackend.dto.VideoResponseDTO;
 import br.com.luis.challengebackend.service.VideoService;
-import io.swagger.annotations.Api;
 
-@Api("Api de Videos")
 @CrossOrigin
 @RestController
 @RequestMapping("/videos")

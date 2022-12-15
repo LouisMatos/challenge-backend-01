@@ -17,12 +17,11 @@ public class AsyncConfig {
 	public Executor taskExecutor() {
 		LOGGER.debug("Creating Async Task Executor");
 		final ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-		executor.setCorePoolSize(1500);
-		executor.setMaxPoolSize(2000);
-		executor.setQueueCapacity(500);
-		executor.setThreadNamePrefix("CarThread-");
-		executor.setKeepAliveSeconds(29);
-		executor.setAwaitTerminationSeconds(29);
+		executor.setCorePoolSize(250);
+		executor.setMaxPoolSize(500);
+		executor.setQueueCapacity(250);
+		executor.setThreadNamePrefix("ChallengeThread-");
+		executor.setKeepAliveSeconds(60);
 		executor.initialize();
 		return executor;
 	}

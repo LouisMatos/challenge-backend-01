@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import br.com.luis.challengebackend.model.Categoria;
 import br.com.luis.challengebackend.model.Video;
 
 @Repository
@@ -21,5 +22,7 @@ public interface VideoRepository extends JpaRepository<Video, Long> {
 
 	@Query(nativeQuery = true, value = "SELECT * FROM videos v LIMIT 5")
 	public List<Video> findByFree();
+
+	public Page<Video> findAllByCategoriaId(Categoria categoria, Pageable pageable);
 
 }
