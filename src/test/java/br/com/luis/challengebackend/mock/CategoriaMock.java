@@ -47,6 +47,8 @@ public class CategoriaMock {
 
 	public static final Optional<Categoria> VIDEO_CATEGORIA_SERVICE = carregaVideoPorCategoria();
 
+	public static final Optional<Categoria> CATEGORIA_SERVICE_VIDEO_NOT_FOUND = carregaCategoriaServiceVideoNotFound();
+
 	private static CategoriaRequestDTO carregaCategoria() {
 		return CategoriaRequestDTO.builder().cor("#cbd1ff").titulo("LIVRE").build();
 	}
@@ -86,6 +88,16 @@ public class CategoriaMock {
 		return Optional.of(categoria);
 	}
 
+
+	private static Optional<Categoria> carregaCategoriaServiceVideoNotFound() {
+		Categoria categoria = new Categoria();
+		categoria.setCor("#5fasf");
+		categoria.setTitulo("LIVRE");
+		categoria.setId(1L);
+		categoria.setVideos(new ArrayList<Video>());
+		return Optional.of(categoria);
+	}
+
 	private static Page<Categoria> carregaCategoriaServiceFindAll() {
 
 		List<Categoria> categorias = new ArrayList<>();
@@ -120,15 +132,5 @@ public class CategoriaMock {
 		categoria.setVideos(videos);
 		return Optional.of(categoria);
 	}
-
-	// private static List<Video> carregaVideoPorCategoria() {
-	//
-	// List<Video> videos = new ArrayList<>();
-	//
-	// videos.add(Video.builder().id(1L)
-	// .titulo("Teste").url("https://www.teste.com.br").descricao("teste").build());
-	//
-	// return videos;
-	// }
 
 }

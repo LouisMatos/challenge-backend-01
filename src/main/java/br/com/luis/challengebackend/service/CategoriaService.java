@@ -36,12 +36,12 @@ public class CategoriaService {
 
 		Page<Categoria> categorias = categoriaRepository.findAll(pageable);
 
-		if (categorias.getContent().isEmpty()) {
-			throw new NotFoundException("Não há categorias na pagina: " + categorias.getNumber());
+		if (categorias.getContent().isEmpty() && pageable.getPageNumber() == 0) {
+			throw new NotFoundException("Não há categorias cadastrados!");
 		}
 
-		if (categorias.isEmpty()) {
-			throw new NotFoundException("Não há categorias cadastrados!");
+		if (categorias.getContent().isEmpty()) {
+			throw new NotFoundException("Não há categorias na pagina: " + pageable.getPageNumber());
 		}
 
 		List<CategoriaResponseDTO> dtos = new ArrayList<>();
@@ -103,17 +103,19 @@ public class CategoriaService {
 		List<VideoResponseDTO> videosResponses = new ArrayList<>();
 
 		if (categoria.isPresent()) {
+
+			if (categoria.get().getVideos().isEmpty()) {
+				throw new NotFoundException("Não há videos cadastrados para essa categoria!");
+			}
+
 			Page<Video> videos = videoRepository.findAllByCategoriaId(categoria.get(), pageable);
 			for (Video video : videos) {
 				VideoResponseDTO videoResponseDTO = new VideoResponseDTO();
 				videosResponses.add(videoResponseDTO.convert(video));
 			}
+
 		} else {
 			throw new UnprocessableEntityException("Não existe categoria com o id: " + id);
-		}
-
-		if (categoria.get().getVideos().isEmpty()) {
-			throw new NotFoundException("Não há videos cadastrados para essa categoria!");
 		}
 
 		return videosResponses;
