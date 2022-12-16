@@ -16,6 +16,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import br.com.luis.challengebackend.enums.Role;
+import br.com.luis.challengebackend.filter.TokenAuthenticationFilter;
 import br.com.luis.challengebackend.repository.UserRepository;
 import br.com.luis.challengebackend.service.AuthenticationService;
 import br.com.luis.challengebackend.service.TokenService;
@@ -24,14 +25,14 @@ import br.com.luis.challengebackend.service.TokenService;
 @Configuration
 @EnableWebSecurity
 @Profile("prod")
-public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	private AuthenticationService autenticacaoService;
 	private TokenService tokenService;
 	private UserRepository userRepository;
 
 	@Autowired
-	public SecurityConfigurations(AuthenticationService autenticacaoService, TokenService tokenService, UserRepository userRepository) {
+	public SecurityConfig(AuthenticationService autenticacaoService, TokenService tokenService, UserRepository userRepository) {
 		this.autenticacaoService = autenticacaoService;
 		this.tokenService = tokenService;
 		this.userRepository = userRepository;

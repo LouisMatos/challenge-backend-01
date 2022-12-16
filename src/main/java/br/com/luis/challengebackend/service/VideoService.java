@@ -19,7 +19,9 @@ import br.com.luis.challengebackend.model.Categoria;
 import br.com.luis.challengebackend.model.Video;
 import br.com.luis.challengebackend.repository.CategoriaRepository;
 import br.com.luis.challengebackend.repository.VideoRepository;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 public class VideoService {
 
@@ -34,9 +36,11 @@ public class VideoService {
 		boolean exists = videoRepository.existsByUrl(videoRequestDTO.getUrl());
 
 		if (exists) {
+			log.warn("Já existe um video cadastrado com a mesma url!");
 			throw new UnprocessableEntityException("Já existe um video cadastrado com a mesma url!");
 		}
 
+		log.info("Processando video para salvar no banco!");
 		return salvaEAtualizaVideo(videoRequestDTO, null);
 
 	}
@@ -107,8 +111,11 @@ public class VideoService {
 		Optional<Categoria> categoria;
 
 		if (videoRequestDTO.getCategoriaId() == null) {
+			log.info("Video sem categoria!");
+			log.info("Adcionando categoria Livre ao video!");
 			categoria = categoriaRepository.findById(Long.parseLong("1"));
 		} else {
+			log.info("Video com categoria!");
 			categoria = categoriaRepository.findById(videoRequestDTO.getCategoriaId());
 		}
 
@@ -118,6 +125,7 @@ public class VideoService {
 		video.setCategoriaId(categoria.get());
 		video.setId(id);
 
+		log.info("Salvando novo videno no banco de dados!");
 		return new VideoResponseDTO().convert(videoRepository.save(video));
 	}
 

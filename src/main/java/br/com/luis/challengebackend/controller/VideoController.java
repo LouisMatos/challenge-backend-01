@@ -10,7 +10,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,11 +23,12 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.luis.challengebackend.dto.VideoRequestDTO;
 import br.com.luis.challengebackend.dto.VideoResponseDTO;
 import br.com.luis.challengebackend.service.VideoService;
+import lombok.extern.slf4j.Slf4j;
 
-@CrossOrigin
+@Slf4j
+@Validated
 @RestController
 @RequestMapping("/videos")
-@Validated
 public class VideoController {
 
 	@Autowired
@@ -36,6 +36,7 @@ public class VideoController {
 
 	@PostMapping
 	public ResponseEntity<VideoResponseDTO> cadastrarVideo(@Valid @RequestBody VideoRequestDTO videoRequestDTO) {
+		log.info("Iniciando o cadastro do video: {}", videoRequestDTO.toString());
 		return ResponseEntity.ok().body(videoService.salvarVideo(videoRequestDTO));
 	}
 

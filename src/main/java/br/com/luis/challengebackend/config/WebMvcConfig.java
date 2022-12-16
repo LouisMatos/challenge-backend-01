@@ -1,18 +1,16 @@
-package br.com.luis.challengebackend.log;
+package br.com.luis.challengebackend.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-@Component
-public class CustomWebConfigurer implements WebMvcConfigurer {
+import br.com.luis.challengebackend.filter.MdcInterceptor;
 
-	@Autowired
-	private InterceptLog logInterceptor;
+@Component
+public class WebMvcConfig implements WebMvcConfigurer {
 
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
-		registry.addInterceptor(logInterceptor);
+		registry.addInterceptor(new MdcInterceptor());
 	}
 }

@@ -1,4 +1,4 @@
-package br.com.luis.challengebackend.config;
+package br.com.luis.challengebackend.filter;
 
 import java.io.IOException;
 import java.util.Optional;
