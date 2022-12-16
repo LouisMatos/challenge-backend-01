@@ -20,17 +20,19 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.google.gson.Gson;
+
 import br.com.luis.challengebackend.dto.CategoriaRequestDTO;
 import br.com.luis.challengebackend.dto.CategoriaResponseDTO;
 import br.com.luis.challengebackend.dto.VideoResponseDTO;
 import br.com.luis.challengebackend.service.CategoriaService;
-import io.swagger.annotations.Api;
+import lombok.extern.slf4j.Slf4j;
 
-@Api("Api de Videos")
+@Slf4j
+@Validated
 @CrossOrigin
 @RestController
 @RequestMapping("/categorias")
-@Validated
 public class CategoriaController {
 
 	@Autowired
@@ -39,6 +41,7 @@ public class CategoriaController {
 	@PostMapping
 	public ResponseEntity<CategoriaResponseDTO> cadastrarCategoria(
 			@Valid @RequestBody CategoriaRequestDTO categoriaRequestDTO) {
+		log.info("Iniciando a criação de nova categoria: {}", new Gson().toJson(categoriaRequestDTO));
 		return ResponseEntity.ok().body(categoriaService.salvarCategoria(categoriaRequestDTO));
 	}
 
@@ -54,8 +57,9 @@ public class CategoriaController {
 	}
 
 	@GetMapping("/{id}/videos")
-	public ResponseEntity<List<VideoResponseDTO>> buscarVideosPorCategoria(@PathVariable("id") Long id) {
-		return ResponseEntity.ok().body(categoriaService.buscarVideosPorCategoria(id));
+	public ResponseEntity<List<VideoResponseDTO>> buscarVideosPorCategoria(@PathVariable("id") Long id,
+			@PageableDefault(page = 0, size = 5, sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
+		return ResponseEntity.ok().body(categoriaService.buscarVideosPorCategoria(id, pageable));
 	}
 
 	@DeleteMapping("/{id}")

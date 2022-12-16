@@ -10,7 +10,7 @@ class ChallengeBackendApplicationTests {
 
 	@Test
 	void contextLoads() {
-		ChallengeBackendApplication.main(new String[] {});
+		//ChallengeBackendApplication.main(new String[] {});
 	}
 
 }

@@ -19,18 +19,24 @@ import br.com.luis.challengebackend.exception.UnprocessableEntityException;
 import br.com.luis.challengebackend.model.Categoria;
 import br.com.luis.challengebackend.model.Video;
 import br.com.luis.challengebackend.repository.CategoriaRepository;
+import br.com.luis.challengebackend.repository.VideoRepository;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 public class CategoriaService {
 
 	@Autowired
 	private CategoriaRepository categoriaRepository;
 
+	@Autowired
+	private VideoRepository videoRepository;
+
 	public List<CategoriaResponseDTO> listarTodasCategorias(Pageable pageable) {
 
 		Page<Categoria> categorias = categoriaRepository.findAll(pageable);
 
-		if(categorias.getContent().isEmpty()) {
+		if (categorias.getContent().isEmpty()) {
 			throw new NotFoundException("Não há categorias na pagina: " + categorias.getNumber());
 		}
 
@@ -57,6 +63,7 @@ public class CategoriaService {
 		boolean exists = categoriaRepository.existsByTitulo(categoriaRequestDTO.getTitulo());
 
 		if (exists) {
+			log.warn("Já existe uma categoria cadastrada com o mesmo Titulo! - {} ", categoriaRequestDTO.getTitulo());
 			throw new UnprocessableEntityException("Já existe uma categoria cadastrada com o mesmo Titulo!");
 		}
 
@@ -89,25 +96,24 @@ public class CategoriaService {
 		return new CategoriaResponseDTO().convert(categoriaRepository.save(categoria));
 	}
 
-	public List<VideoResponseDTO> buscarVideosPorCategoria(Long id) {
+	public List<VideoResponseDTO> buscarVideosPorCategoria(Long id, Pageable pageable) {
 
 		Optional<Categoria> categoria = categoriaRepository.findById(id);
 
-		if (categoria.isEmpty()) {
+		List<VideoResponseDTO> videosResponses = new ArrayList<>();
+
+		if (categoria.isPresent()) {
+			Page<Video> videos = videoRepository.findAllByCategoriaId(categoria.get(), pageable);
+			for (Video video : videos) {
+				VideoResponseDTO videoResponseDTO = new VideoResponseDTO();
+				videosResponses.add(videoResponseDTO.convert(video));
+			}
+		} else {
 			throw new UnprocessableEntityException("Não existe categoria com o id: " + id);
 		}
 
 		if (categoria.get().getVideos().isEmpty()) {
 			throw new NotFoundException("Não há videos cadastrados para essa categoria!");
-		}
-
-		List<Video> videos = categoria.get().getVideos();
-
-		List<VideoResponseDTO> videosResponses = new ArrayList<>();
-
-		for (Video video : videos) {
-			VideoResponseDTO videoResponseDTO = new VideoResponseDTO();
-			videosResponses.add(videoResponseDTO.convert(video));
 		}
 
 		return videosResponses;
