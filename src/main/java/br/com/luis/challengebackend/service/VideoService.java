@@ -55,21 +55,17 @@ public class VideoService {
 
 			videos = videoRepository.findAll(pageable);
 
-			if (videos.getContent().isEmpty()) {
-				throw new NotFoundException("Não há videos na pagina: " + videos.getNumber());
+			if (videos.isEmpty() && pageable.getPageNumber() == 0) {
+				throw new NotFoundException("Não há videos cadastrados!");
 			}
 
-			if (videos.isEmpty()) {
-				throw new NotFoundException("Não há videos cadastrados!");
+			if (videos.getContent().isEmpty()) {
+				throw new NotFoundException("Não há videos na pagina: " + pageable.getPageNumber());
 			}
 
 		} else {
 
 			videos = videoRepository.findByTituloContains(titulo, pageable);
-
-			if (videos.getContent().isEmpty()) {
-				throw new NotFoundException("Não há videos na pagina: " + videos.getNumber());
-			}
 
 			if (videos.isEmpty()) {
 				throw new NotFoundException("Nenhum video foi encontrado com o titulo informado: " + titulo);

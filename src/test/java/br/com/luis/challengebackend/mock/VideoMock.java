@@ -21,6 +21,10 @@ public class VideoMock {
 
 	public static final Page<Video> VIDEO_SERVICE_FIND_ALL_OP = carregaVideoServiceFindAllOP();
 
+	public static final List<Video> VIDEO_SERVICE_FIND_ALL_FREE = carregaVideoServiceFindAllFree();
+
+	public static final List<Video> VIDEO_SERVICE_FIND_ALL_FREE_NOT_FOUND = carregaVideoServiceFindAllFreeNotFound();
+
 	public static final Page<Video> VIDEO_SERVICE_FIND_ALL_NOT_FOUND = carregaVideoServiceFindAllNotFound();
 
 	public static final VideoResponseDTO VIDEO_RESPONSE = carregaVideoResponseDTO();
@@ -83,6 +87,24 @@ public class VideoMock {
 	private static Optional<Video> carregaVideoServiceOP() {
 		return Optional.of(Video.builder().id(1L).descricao("Teste").titulo("Teste").url("https://teste.com.br")
 				.categoriaId(CategoriaMock.CATEGORIA_SERVICE.get()).build());
+	}
+
+
+	private static List<Video> carregaVideoServiceFindAllFree() {
+
+		List<Video> videos = new ArrayList<>();
+
+		videos.add(Video.builder().id(1L).descricao("Teste").titulo("Teste").url("https://teste.com.br")
+				.categoriaId(CategoriaMock.CATEGORIA_SERVICE.get()).build());
+
+		return videos;
+	}
+
+	private static List<Video> carregaVideoServiceFindAllFreeNotFound() {
+
+		List<Video> videos = new ArrayList<>();
+
+		return videos;
 	}
 
 	private static Page<Video> carregaVideoServiceFindAllOP() {
