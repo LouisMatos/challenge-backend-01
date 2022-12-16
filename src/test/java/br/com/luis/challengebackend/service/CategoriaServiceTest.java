@@ -99,7 +99,21 @@ class CategoriaServiceTest {
 		NotFoundException thrown = assertThrows(NotFoundException.class,
 				() -> categoriaService.listarTodasCategorias(pageable));
 
-		assertEquals(thrown.getMessage(), ("Não há categorias na pagina: " + 0));
+		assertEquals(("Não há categorias cadastrados!"), thrown.getMessage());
+
+	}
+
+	@Test
+	void returnFindAllNotFoundPageCategoria() {
+
+		Pageable pageable = PageRequest.of(1, 5);
+
+		when(categoriaRepository.findAll(pageable)).thenReturn(CategoriaMock.CATEGORIA_SERVICE_FIND_ALL_NOT_FOUND);
+
+		NotFoundException thrown = assertThrows(NotFoundException.class,
+				() -> categoriaService.listarTodasCategorias(pageable));
+
+		assertEquals(thrown.getMessage(), ("Não há categorias na pagina: " + 1));
 
 	}
 
@@ -227,19 +241,19 @@ class CategoriaServiceTest {
 	@Test
 	void returnNotFoudVideoFindVideoPorCategoria() {
 
-		//		Long id = 1L;
-		//
-		//		Pageable pageable = PageRequest.of(0, 5);
-		//
-		//		when(categoriaRepository.findById(id)).thenReturn(CategoriaMock.CATEGORIA_SERVICE);
-		//
-		//		when(videoRepository.findAllByCategoriaId(CategoriaMock.VIDEO_CATEGORIA_SERVICE.get(), pageable))
-		//		.thenReturn(VideoMock.VIDEO_SERVICE_FIND_ALL_NOT_FOUND);
-		//
-		//		NotFoundException thrown = assertThrows(NotFoundException.class,
-		//				() -> categoriaService.buscarVideosPorCategoria(id, pageable));
-		//
-		//		assertEquals(thrown.getMessage(), ("Não há videos cadastrados para essa categoria!"));
+		Long id = 1L;
+
+		Pageable pageable = PageRequest.of(0, 5);
+
+		when(categoriaRepository.findById(id)).thenReturn(CategoriaMock.CATEGORIA_SERVICE_VIDEO_NOT_FOUND);
+
+		when(videoRepository.findAllByCategoriaId(CategoriaMock.VIDEO_CATEGORIA_SERVICE.get(), pageable))
+		.thenReturn(VideoMock.VIDEO_SERVICE_FIND_ALL_NOT_FOUND);
+
+		NotFoundException thrown = assertThrows(NotFoundException.class,
+				() -> categoriaService.buscarVideosPorCategoria(id, pageable));
+
+		assertEquals(thrown.getMessage(), ("Não há videos cadastrados para essa categoria!"));
 
 	}
 

@@ -136,6 +136,10 @@ public class VideoService {
 
 		videos = videoRepository.findByFree();
 
+		if (videos.isEmpty()) {
+			throw new NotFoundException("Não há videos cadastrados!");
+		}
+
 		for (Video video : videos) {
 			videosResponses.add(new VideoResponseDTO().convert(video));
 		}

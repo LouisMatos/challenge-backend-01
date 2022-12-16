@@ -35,6 +35,8 @@ public class VideoMock {
 
 	public static final String VIDEO_FIND_ALL_NOT_FOUND = "{\"timestamp\":1670272584333,\"status\":404,\"error\":\"NOT_FOUND\",\"message\":\"Não há videos cadastrados!\",\"path\":\"/videos\"}";
 
+	public static final String VIDEO_FIND_FREE_NOT_FOUND = "{\"timestamp\":1670272584333,\"status\":404,\"error\":\"NOT_FOUND\",\"message\":\"Não há videos cadastrados!\",\"path\":\"/videos/free\"}";
+
 	public static final String VIDEO_NOT_FOUND = "{\"timestamp\":1670267562653,\"status\":404,\"error\":\"NOT_FOUND\",\"message\":\"Nenhum video foi encontrado com o id informado: 1\",\"path\":\"/videos/1\"}";
 
 	public static final String VIDEO_UNPROCESSABLE_ENTITY_DELETE = "{\"timestamp\":1670271691983,\"status\":422,\"error\":\"UNPROCESSABLE_ENTITY\",\"message\":\"Não existe video com o id: 1\",\"path\":\"/videos/1\"}";
@@ -67,6 +69,7 @@ public class VideoMock {
 
 		dtos.add(VideoResponseDTO.builder().id(1L).categoriaId(1L).descricao("Teste").url("http://www.teste.com.br")
 				.titulo("teste").build());
+
 
 		return dtos;
 

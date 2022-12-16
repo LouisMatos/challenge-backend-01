@@ -135,6 +135,41 @@ class VideoControllerTest {
 	}
 
 	@Test
+	void returStatus200WhenFindFreeVideos() throws Exception {
+
+		when(videoService.free()).thenReturn(VideoMock.FIND_ALL);
+
+		MvcResult result = mockMvc.perform( //
+				get("/videos/free") //
+				.contentType(APPLICATION_JSON)) //
+				.andExpect(status().isOk()).andReturn();
+
+		assertEquals(toString(VideoMock.FIND_ALL), result.getResponse().getContentAsString());
+
+	}
+
+	@Test
+	void returnStatus404WhenFindFreeVideosNotFound() throws Exception {
+
+		when(videoService.free())
+		.thenThrow(new NotFoundException("Não há videos cadastrados!"));
+
+		MvcResult result = mockMvc.perform( //
+				get("/videos/free") //
+				.contentType(APPLICATION_JSON)) //
+				.andExpect(status().isNotFound()).andReturn();
+
+		JSONAssert.assertEquals(VideoMock.VIDEO_FIND_FREE_NOT_FOUND,
+				result.getResponse().getContentAsString(StandardCharsets.UTF_8), new CustomComparator(
+						JSONCompareMode.STRICT, Customization.customization("timestamp", new ValueMatcher<Object>() {
+							@Override
+							public boolean equal(Object o1, Object o2) {
+								return true;
+							}
+						})));
+	}
+
+	@Test
 	void returStatus200WhenFindAllVideos() throws Exception {
 
 		when(videoService.listarTodosVideos(any(), any())).thenReturn(VideoMock.FIND_ALL);
