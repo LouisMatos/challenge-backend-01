@@ -1,24 +1,21 @@
 package br.com.luis.challengebackend;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @AutoConfigureMockMvc
-@SuppressWarnings("static-access")
 @SpringBootTest(classes = ChallengeBackendApplicationTests.class)
 class ChallengeBackendApplicationTests {
 
 	@Test
 	void contextLoads() {
 
-		ChallengeBackendApplication app = new ChallengeBackendApplication();
+		ChallengeBackendApplication.main(new String[] {});
 
-		app.main(new String[] {});
-
-		assertNotNull(app);
+		assertTrue(true);
 	}
 
 }
