@@ -10,5 +10,7 @@ mvn clean package -Dmaven.test.skip=true -Dspring.profiles.active=dev
 docker-compose build --no-cache && docker-compose up -d
 
 -Xms512m -Xmx1024m -XX:MaxDirectMemorySize=64M  -XX:MaxMetaspaceSize=128m -XX:ReservedCodeCacheSize=240M -Xss64M
+-Xss4M -Xms512M -Xmx1024M 
+jconsole localhost:9999
 
 ```
