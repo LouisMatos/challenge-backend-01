@@ -62,10 +62,9 @@ services:
     environment:
       - SPRING_DATASOURCE_URL=jdbc:mysql://db_challenge_backend:3306/challenges
       - SPRING_PROFILES_ACTIVE=prod
-      - JAVA_OPTS=-server -Xms256M -Xmx512M -XX:ThreadStackSize=150000 -Xss4M -XX:NativeMemoryTracking=summary -Dcom.sun.management.jmxremote Dcom.sun.management.jmxremote.port=9999 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.local.only=false -Dcom.sun.management.jmxremote.rmi.port=9999 -Dcom.sun.management.jmxremote.host=0.0.0.0 -Djava.rmi.server.hostname=0.0.0.0
+      - JAVA_OPTS=-server -Xms256M -Xmx512M -XX:ThreadStackSize=75000 -Xss4M -XX:NativeMemoryTracking=summary
     ports:
       - 8080:8080
-      - 9999:9999
     networks:
       - net_back
     depends_on:
@@ -75,6 +74,31 @@ services:
         limits:
           cpus: '2'
           memory: 1024M
+
+  adminer:
+    image: adminer
+    restart: always
+    depends_on:
+      - db_challenge_backend
+    environment:
+      - ADMINER_DESIGN=nette
+      - ADMINER_PLUGINS=tables-filter tinymce
+      - ADMINER_DEFAULT_SERVER=mysql
+    command:
+      - 'php'
+      - '-S'
+      - '[::]:9000'
+      - '-t'
+      - '/var/www/html'
+    ports:
+      - 9000:9000
+    networks:
+      - net_back
+    deploy:
+      resources:
+        limits:
+          cpus: '0.2'
+          memory: 64M
           
 networks:
   net_back:

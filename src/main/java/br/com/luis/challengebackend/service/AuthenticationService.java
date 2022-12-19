@@ -23,7 +23,7 @@ public class AuthenticationService implements UserDetailsService {
 		if (user.isPresent()) {
 			return user.get();
 		}
-		throw new UsernameNotFoundException("");
+		throw new UsernameNotFoundException("Usuário Inexistente!");
 	}
 
 }
